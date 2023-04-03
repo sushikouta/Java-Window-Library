@@ -233,6 +233,11 @@ public class window {
                             for (int n = 0;n != wheel_listeners.size();n++) {
                                 wheel_listeners.get(n).accept(new wheel_event() {{
                                     scroll = mouseWheelEvent.getWheelRotation();
+                                    if (mouseWheelEvent.isShiftDown()) {
+                                        is_vertical = true;
+                                    } else {
+                                        is_horizontal = true;
+                                    }
                                 }});
                             }
                         }
@@ -505,10 +510,13 @@ public class window {
     }
     private List<Consumer<wheel_event>> wheel_listeners = new ArrayList<>();
     public class wheel_event {
-        int scroll = 0;
+        public int scroll = 0;
+
+        public boolean is_horizontal = false;
+        public boolean is_vertical = false;
 
         @Override public String toString() {
-            return "[scroll: " + scroll + "]";
+            return "[scroll: " + scroll + ", dirction: " + (is_horizontal ? "HORIZONTAL" : "VERTICAL") + "]";
         }
     }
     public void add_wheel_listener(Consumer<wheel_event> listener) {
